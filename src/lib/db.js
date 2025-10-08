@@ -8,7 +8,7 @@ export const connectDB=  async () => {
 
     try{
 
-        const conn= await    mongoose.connect("mongodb://127.0.0.1:27018/books")
+             const conn= await    mongoose.connect("mongodb+srv://abdoulahlou12345_db_user:<db_password>@cluster0.ldicje0.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0")
     
           console.log("Connected successfully to MongoDB "+conn.connection.host);
      
