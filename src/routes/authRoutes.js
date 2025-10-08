@@ -2,7 +2,7 @@ import express from 'express';
 
 import User from '../modules/User.js';
 import jwt from 'jsonwebtoken';
-require('dotenv').config();
+import 'dotenv/config'; 
 
 
 
