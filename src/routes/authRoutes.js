@@ -107,7 +107,13 @@ try {
 
     // Generate token
     const token = generateToken(user._id);
-    res.status(200).json({ message: 'Login successful', token,user });
+    res.status(200).json({ message: 'Login successful', token,   user: {
+        id: user._id,
+        username: user.username,
+        email: user.email,
+        profileImage: user.profileImage,
+        createdAt: user.createdAt,
+      } });
 } catch (error) {
     console.error('Error during login:', error);
     res.status(500).json({ message: 'Server error ' + error.message });
