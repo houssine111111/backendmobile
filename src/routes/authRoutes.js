@@ -20,11 +20,9 @@ const generateToken = (userId) => {
     process.env.JWT_SECRET,
     { expiresIn: '1h' }
   );
-};
                  
-                 );
+               
 
-  return `token-for-user-${userId}`;
 };
 
 router.post('/register', async (req, res) => {
