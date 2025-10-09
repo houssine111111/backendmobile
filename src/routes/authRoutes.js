@@ -9,7 +9,7 @@ import 'dotenv/config';
 const router = express.Router();
 
 const generateToken = (userId) => {
-  return jwt.sign({ id: userId }, process.env.JWT_SECRET, { expiresIn: '1h' }
+  return jwt.sign({ id: userId },esPotLlz8OXZ1gnDG0mMZE1GCXW3XOS+DcZtKGjtm/I=, { expiresIn: '1h' }
 
                    return `token-for-user-${userId}`;
              
