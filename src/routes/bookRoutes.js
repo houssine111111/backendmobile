@@ -14,6 +14,8 @@ router.post("/",protectRoute,async(req,res)=>{
       return res.status(400).send("all fields are required")
     }
 
+      console.log("Image uploaded to Cloudinary:", imageUrl);
+
 //upload image to cloudinary
 const uploadResponse = await cloudinary.uploader.upload(image);
 const imageUrl = uploadResponse.secure_url;
