@@ -25,9 +25,9 @@ const imageUrl = uploadResponse.secure_url;
     }
    console.log("Image uploaded to Cloudinary:", imageUrl);
 //save document to database
-// const newBook = new Book({ title, caption, rating, image: imageUrl, user: req.user._id });
-// await newBook.save();
-// res.status(201).send("book created")
+const newBook = new Book({ title, caption, rating, image: imageUrl, user: req.user._id });
+await newBook.save();
+res.status(201).send("book created")
 res.json(newBook)
   } catch (error) {
   console.error("Error creating book:", error); // Log the full error in server console
