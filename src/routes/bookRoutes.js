@@ -24,7 +24,7 @@ await newBook.save();
 res.status(201).send("book created")
 res.json(newBook)
   } catch (error) {
-      res.status(500).send("server error || " + error.message)
+      res.status(500).json({ message: "Server error || " + error.message });
   } 
 })
 
