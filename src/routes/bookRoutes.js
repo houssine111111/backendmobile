@@ -19,16 +19,15 @@ router.post("/",protectRoute,async(req,res)=>{
 //upload image to cloudinary
 const uploadResponse = await cloudinary.uploader.upload(image);
 const imageUrl = uploadResponse.secure_url;
-    console.log(imageUrl)
+   
        if (!imageUrl) {
       return res.status(500).send("Image upload failed");
     }
    console.log("Image uploaded to Cloudinary:", imageUrl);
+      console.log("Image uploaded to Cloudinary:", image);
 //save document to database
-const newBook = new Book({ title, caption, rating, image: imageUrl, user: req.user._id });
-await newBook.save();
-res.status(201).send("book created")
-res.json(newBook)
+
+
   } catch (error) {
   console.error("Error creating book:", error); // Log the full error in server console
     res.status(500).json({
