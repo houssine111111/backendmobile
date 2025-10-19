@@ -70,7 +70,7 @@ router.delete("/:id",protectRoute,async(req,res)=>{
   
       try {
         const publicId = book.image.split('/').pop().split('.')[0]; // Extract public ID from URL
-         console.log(publicId)
+        
         await cloudinary.uploader.destroy(publicId);
       } catch (error) {
         console.error("Error deleting image from Cloudinary:", error);
