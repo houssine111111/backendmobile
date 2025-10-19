@@ -14,15 +14,15 @@ router.post("/",protectRoute,async(req,res)=>{
       return res.status(400).send("all fields are required")
     }
 
-   
-
 //upload image to cloudinary
-const uploadResponse = await cloudinary.uploader.upload(image);
-const imageUrl = uploadResponse.secure_url;
-   
-       if (!imageUrl) {
+ const uploadResponse = await cloudinary.uploader.upload(image);
+    const imageUrl = uploadResponse.secure_url;
+    console.log("Cloudinary Upload Response:", uploadResponse);
+    if (!imageUrl) {
       return res.status(500).send("Image upload failed");
     }
+
+    console.log("Image uploaded to Cloudinary:", imageUrl);
 
 //save document to database
 const newBook = new Book({ title, caption, rating, image: imageUrl, user: req.user._id });
@@ -30,10 +30,7 @@ await newBook.save();
 res.status(201).send("book created")
 res.json(newBook)
   } catch (error) {
-  console.error("Error creating book:", error); // Log the full error in server console
-    res.status(500).json({
-      message: error.message || "Server error while creating book",
-    });
+res.status(500).json({ message: "Server error || " + error.message });
   } 
 })
 
@@ -57,30 +54,31 @@ router.get("/",protectRoute,async(req,res)=>{
 })
 
 //delete
-router.delete("/:id", protectRoute, async (req, res) => {
+router.delete("/:id",protectRoute,async(req,res)=>{
   try {
     const { id } = req.params;
     const book = await Book.findById(id);
-    if (!book) return res.status(404).json({ message: "Book not found" });
-
-    if (book.user.toString() !== req.user._id.toString()) {
-      return res.status(403).json({ message: "Forbidden" });
+    if (!book) {
+      return res.status(404).send("book not found");
     }
-
-    // Delete image from Cloudinary (if you stored public_id)
-    if (book.cloudinaryPublicId) {
+    if (book.user.toString() !== req.user._id.toString()) {
+      return res.status(403).send("forbidden");
+    }
+   
+//if you want to delete image from cloudinary
+ if (book.image && book.image.includes('&cloudinary')) {
       try {
-        await cloudinary.uploader.destroy(book.cloudinaryPublicId);
-      } catch (deleteError) {
-        console.log("Error deleting image from Cloudinary", deleteError);
+        const publicId = book.image.split('/').pop().split('.')[0]; // Extract public ID from URL
+        await cloudinary.uploader.destroy(publicId);
+      } catch (error) {
+        console.error("Error deleting image from Cloudinary:", error);
       }
     }
-
+ // await book.remove();
     await book.deleteOne();
-    res.json({ message: "Book deleted successfully" });
+    res.send("book deleted");
   } catch (error) {
-    console.error("Error deleting book:", error);
-    res.status(500).json({ message: "Server error" });
+    res.status(500).send("server error");
   }
 });
 
