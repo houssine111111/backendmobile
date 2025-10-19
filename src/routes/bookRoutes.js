@@ -23,7 +23,7 @@ const imageUrl = uploadResponse.secure_url;
        if (!imageUrl) {
       return res.status(500).send("Image upload failed");
     }
-   console.log("Image uploaded to Cloudinary:", imageUrl);
+
 //save document to database
 const newBook = new Book({ title, caption, rating, image: imageUrl, user: req.user._id });
 await newBook.save();
@@ -70,6 +70,7 @@ router.delete("/:id",protectRoute,async(req,res)=>{
    
 //if you want to delete image from cloudinary
 if (book.image && book.image.includes("cloudinary")) {
+  Alert.alert("cloudinary")
       try {
         const publicId = book.image.split("/").pop().split(".")[0];
         await cloudinary.uploader.destroy(publicId);
@@ -78,8 +79,8 @@ if (book.image && book.image.includes("cloudinary")) {
       }
     }
 
- // await book.remove();
-    await book.deleteOne();
+ await book.remove();
+    // await book.deleteOne();
     res.send("book deleted");
   } catch (error) {
     res.status(500).send("server error");
