@@ -58,7 +58,17 @@ router.get("/",protectRoute,async(req,res)=>{
 
 //delete
 router.delete("/:id",protectRoute,async(req,res)=>{
-  try {
+  
+  if (book.image && book.image.includes("cloudinary")) {
+  Alert.alert("cloudinary")
+      try {
+        const publicId = book.image.split("/").pop().split(".")[0];
+        await cloudinary.uploader.destroy(publicId);
+      } catch (deleteError) {
+        console.log("Error deleting image from cloudinary", deleteError);
+      }
+  try {   
+    await book.deleteOne();
     const { id } = req.params;
     const book = await Book.findById(id);
     if (!book) {
@@ -69,18 +79,11 @@ router.delete("/:id",protectRoute,async(req,res)=>{
     }
    
 //if you want to delete image from cloudinary
-if (book.image && book.image.includes("cloudinary")) {
-  Alert.alert("cloudinary")
-      try {
-        const publicId = book.image.split("/").pop().split(".")[0];
-        await cloudinary.uploader.destroy(publicId);
-      } catch (deleteError) {
-        console.log("Error deleting image from cloudinary", deleteError);
-      }
+
     }
 
- await book.remove();
-    // await book.deleteOne();
+ // await book.remove();
+
     res.send("book deleted");
   } catch (error) {
     res.status(500).send("server error");
